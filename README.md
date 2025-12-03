@@ -5,10 +5,12 @@ Repository for ADDS scripts
 
 # Script demo
 
-<img width="611" height="344" alt="image" src="https://github.com/user-attachments/assets/92826fdf-e372-4cb1-993a-f0dbdbc1444b" />
+<img width="611" height="338" alt="image" src="https://github.com/user-attachments/assets/e855f6da-d00b-4b5e-b583-592b8d78e3a8" />
+
 
 # Result
 
-<img width="586" height="184" alt="image" src="https://github.com/user-attachments/assets/cc6ee78e-f79e-4d88-9a3d-1f07e26865e2" />
+<img width="659" height="179" alt="image" src="https://github.com/user-attachments/assets/89a95437-2769-44d1-bb1d-145bc560f7a9" />
+
 
 
