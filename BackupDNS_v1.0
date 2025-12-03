@@ -1,6 +1,6 @@
-<############################# INFORMATION ####################################
+<#
 # Backup Active Directory DNS Zones v1.0
-# Created 03/12/2025
+# Created 12/03/2025
 # Author : ennebet.othmane@gmail.com
 # Cloud & Security Architect
 
@@ -19,7 +19,7 @@ against any claims or lawsuits, including attorneys` fees, that arise or result
 from the use or distribution of the Sample Code..
 
 # DESCRIPTION 
-# - Backup all primary DNS zones to a newly created random folder under C:\Temp\DNS\DNS_Xxxxxxx
+# - Backup all primary DNS zones to a newly created random folder under C:\Temp\DNS\DNS_Xxxxxxx 
 
 # REQUIREMENTS 
 #  - Run on a Domain Controller OR domain-joined machine with RSAT installed
@@ -33,7 +33,7 @@ from the use or distribution of the Sample Code..
 
 # Variable: generate a random number for unique folder naming
 $rand = Get-Random
-
+$i = 1
 # Create random base DNS backup directory 
 
 $DNSbackupdir = "C:\Temp\DNS\DNS_$rand"
@@ -47,10 +47,11 @@ try {
 $zones = Get-DnsServerZone | Where-Object { $_.ZoneName -notlike "*in-addr*" -and $_.ZoneType -ne "Forwarder" -and $_.ZoneName -notlike "*TrustAnchors*"}
 
 # Display all relevant primary DNS zones excluding reverse lookup, forwarders, and Trust Anchors
-write-host "[+] Primary DNS zones : " -ForegroundColor DarkBlue
+write-host "[+] Primary DNS zones : " $zones.count -ForegroundColor DarkBlue
  
 $zones | ForEach-Object {
-Write-Host "Primary Zone Name found : " $_.ZoneName -ForegroundColor DarkBlue
+Write-Host "Primary DNS zone found [$i] : " $_.ZoneName -ForegroundColor DarkBlue
+$i++
 }
 
 # Processing Old and new saved DNS Zones
@@ -84,7 +85,7 @@ Write-Host "[+] Exporting DNS Zones $zoneName to C:\Windows\System32\dns" -Foreg
     }
 }
 
-Write-Host "[+] Export completed. All files has been saved by default in C:\Windows\System32\dns" -ForegroundColor Green
+Write-Host "[+] Export completed. All files have been saved by default in C:\Windows\System32\dns" -ForegroundColor Green
 
 
 # Wait 5 seconds - optional, but could be reduced or removed unless needed for file operations
@@ -95,7 +96,7 @@ foreach ($zone in $zones) {
     $zoneFile = "$($zone.ZoneName).dns"
     $sourcePath = "C:\Windows\System32\dns\$zoneFile"
     $destinationPath = Join-Path -Path $DNSbackupdir -ChildPath $zoneFile
-    Write-Host "[+] Moving DNS Zones $zoneFile to C:\Temp\DNS\DNS_$rand" -ForegroundColor Blue
+    Write-Host "[+] Copying DNS Zones $zoneFile to C:\Temp\DNS\DNS_$rand" -ForegroundColor Blue
     if (Test-Path $sourcePath) {
         Copy-Item -Path $sourcePath -Destination $destinationPath -Force
         write-host "==> $sourcePath copied to $destinationPath" -ForegroundColor Yellow
@@ -111,6 +112,7 @@ catch
 {
 write-host "[+] unable to get DNS zones ! Check your DNS server !" -ForegroundColor Red
 }
+
 
 
 
