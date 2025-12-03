@@ -1,0 +1,118 @@
+<############################# INFORMATION ####################################
+# Backup Active Directory DNS Zones v1.0
+# Created 03/12/2025
+# Author : ennebet.othmane@gmail.com
+# Cloud & Security Architect
+
+.COPYRIGHT .
+THIS SAMPLE CODE AND ANY
+RELATED INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.  We grant You a
+nonexclusive, royalty-free right to use and modify the Sample Code and to
+reproduce and distribute the object code form of the Sample Code, provided
+that You agree: (i) to not use Our name, logo, or trademarks to market Your
+software product in which the Sample Code is embedded; (ii) to include a valid
+copyright notice on Your software product in which the Sample Code is embedded;
+and (iii) to indemnify, hold harmless, and defend Us and Our suppliers from and
+against any claims or lawsuits, including attorneys` fees, that arise or result
+from the use or distribution of the Sample Code..
+
+# DESCRIPTION 
+# - Backup all primary DNS zones to a newly created random folder under C:\Temp\DNS\DNS_Xxxxxxx
+
+# REQUIREMENTS 
+#  - Run on a Domain Controller OR domain-joined machine with RSAT installed
+#  - Requires Domain Admin or DNS Admin privileges
+#  - PowerShell v2 or above
+
+# EXAMPLE 
+# .\Backup_DNS_v1.ps1
+
+#>
+
+# Variable: generate a random number for unique folder naming
+$rand = Get-Random
+
+# Create random base DNS backup directory 
+
+$DNSbackupdir = "C:\Temp\DNS\DNS_$rand"
+if (!(Test-Path -Path $DNSbackupdir)) {
+    New-Item -ItemType Directory -Path $DNSbackupdir -Force
+}
+
+# Get all relevant primary DNS zones excluding reverse lookup, forwarders, and Trust Anchors
+write-host "[+] Getting DNS Zones, please wait..." -ForegroundColor Green
+try {
+$zones = Get-DnsServerZone | Where-Object { $_.ZoneName -notlike "*in-addr*" -and $_.ZoneType -ne "Forwarder" -and $_.ZoneName -notlike "*TrustAnchors*"}
+
+# Display all relevant primary DNS zones excluding reverse lookup, forwarders, and Trust Anchors
+write-host "[+] Primary DNS zones : " -ForegroundColor DarkBlue
+ 
+$zones | ForEach-Object {
+Write-Host "Primary Zone Name found : " $_.ZoneName -ForegroundColor DarkBlue
+}
+
+# Processing Old and new saved DNS Zones
+foreach ($zone in $zones) {
+    $zoneName = $zone.ZoneName
+    if ((Test-Path -Path "C:\Windows\System32\dns\$zoneName.dns")) {
+    try {
+    Remove-Item "C:\Windows\System32\dns\$zoneName.dns" -Force
+    
+    }
+    catch {
+    write-host "==> Old file C:\Windows\System32\dns\$zoneName.dns was not removed !" -ForegroundColor Red
+    }
+
+    sleep 2
+}
+# Exporting DNS Zones to "C:\Windows\System32\dns"
+
+Write-Host "[+] Exporting DNS Zones $zoneName to C:\Windows\System32\dns" -ForegroundColor Yellow
+
+    try {
+        
+        # Export zone file using PowerShell cmdlet
+        Export-DnsServerZone -Name $zoneName -FileName "$zoneName.dns" -ErrorAction Stop
+        write-host "==> $zoneName.dns exported to C:\Windows\System32\dns\$zoneName.dns" -ForegroundColor Yellow
+    } 
+    
+    catch {
+        write-host "==> Failed to export zone C:\Windows\System32\dns\$zoneName.dns" -ForegroundColor Red
+        
+    }
+}
+
+Write-Host "[+] Export completed. All files has been saved by default in C:\Windows\System32\dns" -ForegroundColor Green
+
+
+# Wait 5 seconds - optional, but could be reduced or removed unless needed for file operations
+Start-Sleep -Seconds 5
+
+# Move the exported zone files from system DNS folder to backup folder
+foreach ($zone in $zones) {
+    $zoneFile = "$($zone.ZoneName).dns"
+    $sourcePath = "C:\Windows\System32\dns\$zoneFile"
+    $destinationPath = Join-Path -Path $DNSbackupdir -ChildPath $zoneFile
+    Write-Host "[+] Moving DNS Zones $zoneFile to C:\Temp\DNS\DNS_$rand" -ForegroundColor Blue
+    if (Test-Path $sourcePath) {
+        Copy-Item -Path $sourcePath -Destination $destinationPath -Force
+        write-host "==> $sourcePath copied to $destinationPath" -ForegroundColor Yellow
+    } else {
+        Write-host "==> File not found: $sourcePath" -ForegroundColor Red
+    }
+}
+
+Write-Host "[+] DNS Backup files moved to $DNSbackupdir" -ForegroundColor Green
+
+}
+catch
+{
+write-host "[+] unable to get DNS zones ! Check your DNS server !" -ForegroundColor Red
+}
+
+
+
+
+
