@@ -1,5 +1,10 @@
 # ADDS
 Repository for ADDS scripts
+
+# SYNOPSIS
+    Lists AD users with their effective password settings AND all applicable PSOs
+    (directly linked or via groups), including each PSO's Precedence.
+    
 # How to
 
 .PARAMETER SearchBase
@@ -42,11 +47,11 @@ Repository for ADDS scripts
 <img width="1677" height="51" alt="image" src="https://github.com/user-attachments/assets/6b0b9607-6889-4158-8d55-e1acb9a4d630" />
 
 - All users file export : Users_PSO_Expanded_All.csv
-.\Get-AdUsers-AllPSO-WithPrecedence.ps1 -ExpandPerPSO -OutCsv .\Users_PSO_Expanded.csv
+- .\Get-AdUsers-AllPSO-WithPrecedence.ps1 -ExpandPerPSO -OutCsv .\Users_PSO_Expanded.csv
 <img width="1862" height="645" alt="image" src="https://github.com/user-attachments/assets/9e69500f-b853-45e2-b686-820659c0e8c2" />
 
 - Specific OU file export : Users_PSO_Expanded_Tier2.csv
-.\Get-AdUsers-AllPSO-WithPrecedence.ps1 -UseTokenGroups -EnabledOnly -SearchBase "OU=Users,OU=Tier 2,OU=0_Tier Model Administration,DC=contoso,DC=com"
+- .\Get-AdUsers-AllPSO-WithPrecedence.ps1 -UseTokenGroups -EnabledOnly -SearchBase "OU=Users,OU=Tier 2,OU=0_Tier Model Administration,DC=contoso,DC=com"
 
 <img width="1868" height="180" alt="image" src="https://github.com/user-attachments/assets/4f6cc522-b94e-491d-bd5a-8c17920126eb" />
 
