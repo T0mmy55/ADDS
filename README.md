@@ -31,9 +31,9 @@ Repository for ADDS scripts
       to the user object and all of the user's groups.
 
 .EXAMPLES
-    - .\Get-AdUsers-AllPSO-WithPrecedence.ps1
-    - .\Get-AdUsers-AllPSO-WithPrecedence.ps1 -ExpandPerPSO -OutCsv .\Users_PSO_Expanded.csv
-    - .\Get-AdUsers-AllPSO-WithPrecedence.ps1 -UseTokenGroups -EnabledOnly -SearchBase "OU=Users,OU=Tier 2,OU=0_Tier Model Administration,DC=contoso,DC=com"
+    [+] .\Get-AdUsers-AllPSO-WithPrecedence.ps1
+    [+] .\Get-AdUsers-AllPSO-WithPrecedence.ps1 -ExpandPerPSO -OutCsv .\Users_PSO_Expanded.csv
+    [+] .\Get-AdUsers-AllPSO-WithPrecedence.ps1 -UseTokenGroups -EnabledOnly -SearchBase "OU=Users,OU=Tier 2,OU=0_Tier Model Administration,DC=contoso,DC=com"
     
 # Execution and results
 
