@@ -53,7 +53,7 @@ Repository for ADDS scripts
 - Effective applied PSO on user T0-Othmane [Duplicate found]
 <img width="1693" height="126" alt="image" src="https://github.com/user-attachments/assets/2f046967-bf8c-4ea5-b6aa-c74b73e9dfe6" />
 
-- Specific OU file export : Users_PSO_Expanded_Tier2.csv
+- Target a specific OU then export to a CSV file : Users_PSO_Expanded_Tier2.csv
 - .\Get-AdUsers-AllPSO-WithPrecedence.ps1 -UseTokenGroups -EnabledOnly -SearchBase "OU=Users,OU=Tier 2,OU=0_Tier Model Administration,DC=contoso,DC=com"
 <img width="1868" height="180" alt="image" src="https://github.com/user-attachments/assets/4f6cc522-b94e-491d-bd5a-8c17920126eb" />
 
