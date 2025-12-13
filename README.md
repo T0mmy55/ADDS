@@ -5,36 +5,6 @@ Repository for ADDS scripts
     Lists AD users with their effective password settings AND all applicable PSOs
     (directly linked or via groups), including each PSO's Precedence.
     
-# How to
-
-.PARAMETER SearchBase
-    DN of the OU to scope the search.
-
-.PARAMETER EnabledOnly
-    Return enabled users only.
-
-.PARAMETER Server
-    Target domain controller.
-
-.PARAMETER OutCsv
-    Optional CSV export path.
-
-.PARAMETER UseTokenGroups
-    Use tokenGroups to resolve transitive group memberships (slower, but exhaustive).
-
-.PARAMETER ExpandPerPSO
-    Output one row per (User, PSO) pair instead of one row per user.
-
-.NOTES
-    - Effective PSO (winner) is still taken from msDS-ResultantPSO.
-    - All applicable PSOs are discovered by mapping msDS-PSOAppliesTo
-      to the user object and all of the user's groups.
-
-.EXAMPLES
-  Get-AdUsers-AllPSO-WithPrecedence.ps1
-  Get-AdUsers-AllPSO-WithPrecedence.ps1 -ExpandPerPSO -OutCsv .\Users_PSO_Expanded.csv
-  Get-AdUsers-AllPSO-WithPrecedence.ps1 -UseTokenGroups -EnabledOnly -SearchBase "OU=Users,OU=Tier 2,OU=0_Tier Model Administration,DC=contoso,DC=com"
-    
 # Execution and results
 
 [+] Getting applied password policies on all active directory users with effective PSO precedence
