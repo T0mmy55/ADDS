@@ -31,6 +31,17 @@ The script systematically :
 .REQUIREMENTS 
 - Run on a Any Domain Controller OR domain-joined machine with RSAT installed
 
+# Group Policy Objects
+
+# The PowerShell script performs the following:
+
+- Backs up all GPOs in the domain to a timestamped folder, ensuring a restore point before maintenance operations on Domain Controllers
+
+- Creates a detailed HTML report listing all GPOs, their status, modification times, owners, and backup results.
+
+
+
+https://github.com/T0mmy55/ADDS/tree/GPOs-Backup%26Report
 
 # EXAMPLE 
 # .\GPO_Report_v1.ps1
@@ -158,6 +169,7 @@ catch
 {
 $gpobkp = "<font color=#FF0000> backup Failed</font>"
 Write-Host " => [$idx] - Backup Failed GPO : " $GPO.Displayname -ForegroundColor Red
+$gponame = ""
 }
 
 $indexTable += "<tr><td>$gpoName<td>$gpoId<td>$gpoModificationTime<td>$gpoStatus<td>$gpoOwner<td>$gpobkp<td>$gponame.html</tr>"      
@@ -241,7 +253,7 @@ text-shadow:2px 2px 10px #000000;
         margin-top: 5px;
         margin-right: 0px;
         margin-bottom: 10px;
-        table {²
+        table {Â²
             table-layout:fixed;
             border: thin solid #FFFFFF;}
 .shadow {
